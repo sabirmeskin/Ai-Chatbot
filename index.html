@@ -52,6 +52,7 @@
             border-radius: 8px;
             max-width: 75%;
             word-wrap: break-word;
+            width: fit-content;
         }
         .chat-message.user {
             background-color: #007bff;
@@ -66,13 +67,7 @@
             align-self: flex-start;
             clear: both;
         }
-        .chat-message.waiting {
-            background-color: #ffc107;
-            color: #212529;
-            align-self: center;
-            text-align: center;
-            font-style: italic;
-        }
+   
         .chat-input {
             display: flex;
             border-top: 1px solid #ced4da;
@@ -100,7 +95,15 @@
         .chat-input button:hover {
             background-color: #0056b3;
         }
-  
+        @keyframes thinkingAnimation {
+            0% { opacity: 0.2; }
+            50% { opacity: 1; }
+            100% { opacity: 0.2; }
+        }
+
+        #thinking {
+            animation: thinkingAnimation 1s infinite;
+        }
     </style>
 </head>
 <body>
@@ -124,19 +127,7 @@
                 sendMessage();
             }
         });
-        function sendMessage() {
-            const userInput = document.getElementById('user-input');
-            const message = userInput.value.trim();
-            if (message === '') return;
-
-            addMessage('user', message);
-            userInput.value = '';
-
-            // Simulate bot response
-           
-                addMessage('bot', getBotResponse(message));
-           
-        }
+       
 
         function addMessage(sender, message) {
             const chatMessages = document.getElementById('chat-messages');
@@ -147,15 +138,49 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        function getBotResponse(message) {
-            // Simple bot response logic
-            const responses = {
-                'hello': 'Hi there!',
-                'how are you': 'I am a bot, I am always good.',
-                'bye': 'Goodbye!'
-            };
-            return responses[message.toLowerCase()] || "I don't understand that.";
-        }
+            function getBotResponse(message) {
+                // Simulate a delay for the bot to "think"
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve("This is a bot response to: " + message);
+                    }, 2000);
+                });
+            }
+
+            function addThinkingAnimation() {
+                const chatMessages = document.getElementById('chat-messages');
+                const thinkingElement = document.createElement('div');
+                thinkingElement.classList.add('chat-message', 'bot');
+                thinkingElement.textContent = '...';
+                thinkingElement.id = 'thinking';
+                chatMessages.appendChild(thinkingElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function removeThinkingAnimation() {
+                const thinkingElement = document.getElementById('thinking');
+                if (thinkingElement) {
+                    thinkingElement.remove();
+                }
+            }
+
+            function sendMessage() {
+                const userInput = document.getElementById('user-input');
+                const message = userInput.value.trim();
+                if (message === '') return;
+
+                addMessage('user', message);
+                userInput.value = '';
+
+                // Add thinking animation
+                addThinkingAnimation();
+
+                // Simulate bot response
+                getBotResponse(message).then((response) => {
+                    removeThinkingAnimation();
+                    addMessage('bot', response);
+                });
+            }
     </script>
 </body>
 </html>
