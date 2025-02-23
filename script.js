@@ -83,6 +83,29 @@ function addMessage(sender, message) {
             console.error('Error generating bot response:', error);
         });
     }
+function startRecording() {
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = 'fr-FR';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.start();
+
+    recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById('user-input').value = transcript;
+     
+        sendMessage();
+    };
+
+    recognition.onerror = function(event) {
+        console.error('Speech recognition error:', event.error);
+    };
+
+    recognition.onend = function() {
+        console.log('Speech recognition service disconnected');
+    };
+}
     
 
     async function generateBotResponse(message) {
