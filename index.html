@@ -6,70 +6,88 @@
     <title>AI Chatbot</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #f0f0f0;
+            background-color: #e9ecef;
         }
         .chat-container {
-            width: 400px;
-            max-width: 100%;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 450px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            height: 600px; /* Fixed height for the chat container */
         }
         .chat-header {
-            background-color: #007bff;
-            color: #fff;
-            padding: 10px;
+            background-color: #343a40;
+            color: #ffffff;
+            padding: 15px;
             text-align: center;
-            font-size: 1.2em;
+            font-size: 1.5em;
             font-weight: bold;
         }
         .chat-messages {
             flex: 1;
-            padding: 10px;
+            padding: 15px;
             overflow-y: auto;
-            background-color: #f9f9f9;
+            background-color: #f8f9fa;
+            height: calc(100% - 120px); /* Adjust height to fit within the container */
+        }
+        .chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+        .chat-messages::-webkit-scrollbar-thumb {
+            background-color: #6c757d;
+            border-radius: 4px;
         }
         .chat-message {
             margin: 10px 0;
-            padding: 10px;
-            border-radius: 5px;
-            max-width: 70%;
+            padding: 12px;
+            border-radius: 8px;
+            max-width: 75%;
+            word-wrap: break-word;
         }
         .chat-message.user {
             background-color: #007bff;
-            color: #fff;
+            color: #ffffff;
             align-self: flex-end;
         }
         .chat-message.bot {
-            background-color: #e0e0e0;
-            color: #000;
+            background-color: #dee2e6;
+            color: #212529;
             align-self: flex-start;
         }
         .chat-input {
             display: flex;
-            border-top: 1px solid #ddd;
+            border-top: 1px solid #ced4da;
+            padding: 10px;
+            background-color: #ffffff;
         }
         .chat-input input {
             flex: 1;
             padding: 10px;
-            border: none;
-            border-radius: 0;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 1em;
+            margin-right: 10px;
         }
         .chat-input button {
-            padding: 10px;
+            padding: 10px 20px;
             background-color: #007bff;
-            color: #fff;
+            color: #ffffff;
             border: none;
+            border-radius: 5px;
             cursor: pointer;
+            font-size: 1em;
+        }
+        .chat-input button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -87,27 +105,6 @@
         </div>
     </div>
 
-    <script>
-        function sendMessage() {
-            const userInput = document.getElementById('user-input');
-            const chatMessages = document.getElementById('chat-messages');
-
-            if (userInput.value.trim() !== '') {
-                const userMessage = document.createElement('div');
-                userMessage.textContent = userInput.value;
-                userMessage.classList.add('chat-message', 'user');
-                chatMessages.appendChild(userMessage);
-
-                userInput.value = '';
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-        }
-
-        document.getElementById('user-input').addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                sendMessage();
-            }
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
