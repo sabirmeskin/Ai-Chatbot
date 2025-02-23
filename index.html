@@ -138,15 +138,7 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-            function getBotResponse(message) {
-                // Simulate a delay for the bot to "think"
-                return new Promise((resolve) => {
-                    setTimeout(() => {
-                        resolve("This is a bot response to: " + message);
-                    }, 2000);
-                });
-            }
-
+          
             function addThinkingAnimation() {
                 const chatMessages = document.getElementById('chat-messages');
                 const thinkingElement = document.createElement('div');
@@ -175,12 +167,43 @@
                 // Add thinking animation
                 addThinkingAnimation();
 
-                // Simulate bot response
-                getBotResponse(message).then((response) => {
+                generateBotResponse(message).then(botResponse => {
                     removeThinkingAnimation();
-                    addMessage('bot', response);
+                    addMessage('bot', botResponse);
+                }).catch(error => {
+                    removeThinkingAnimation();
+                    addMessage('bot', 'Sorry, something went wrong.');
+                    console.error('Error generating bot response:', error);
                 });
+            
+               
             }
+            
+        
+            async function generateBotResponse(message) {
+                const apiKey = 'AIzaSyBooCijoYiMf8ToobIOQFrBQZ7Kf2vJywA';
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{ text: message }]
+                        }]
+                    })
+                });
+
+                const data = await response.json();
+              console.log(data.candidates[0].content.parts[0].text);
+              
+                
+                return data.candidates[0].content.parts[0].text;
+            }
+            
+
     </script>
 </body>
 </html>
