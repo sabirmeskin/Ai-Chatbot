@@ -54,10 +54,39 @@ function addMessage(sender, message) {
     
        
     }
+    function speakMessage(message) {
+        const synth = window.speechSynthesis;
+        const utterance = new SpeechSynthesisUtterance(message);
+        synth.speak(utterance);
+    }
+
+    // Modify sendMessage to include voice response
+    function sendMessage() {
+        const userInput = document.getElementById('user-input');
+        const message = userInput.value.trim();
+        if (message === '') return;
+
+        addMessage('user', message);
+        userInput.value = '';
+        // Add thinking animation
+        addThinkingAnimation();
+
+        generateBotResponse(message).then(botResponse => {
+            speakMessage(botResponse);
+
+            removeThinkingAnimation();
+            addMessage('bot', botResponse);
+             // Speak the bot response
+        }).catch(error => {
+            removeThinkingAnimation();
+            addMessage('bot', 'Sorry, something went wrong.');
+            console.error('Error generating bot response:', error);
+        });
+    }
     
 
     async function generateBotResponse(message) {
-        const apiKey = process.env.API_KEY;
+        const apiKey = "AIzaSyBooCijoYiMf8ToobIOQFrBQZ7Kf2vJywA";
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
         const response = await fetch(url, {
@@ -67,6 +96,7 @@ function addMessage(sender, message) {
             },
             body: JSON.stringify({
                 contents: [{
+                    role: 'user',
                     parts: [{ text: message }]
                 }]
             })
