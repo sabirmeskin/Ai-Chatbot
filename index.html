@@ -58,11 +58,20 @@
             color: #ffffff;
             align-self: flex-end;
             float: right;
+            clear: both;
         }
         .chat-message.bot {
             background-color: #dee2e6;
             color: #212529;
             align-self: flex-start;
+            clear: both;
+        }
+        .chat-message.waiting {
+            background-color: #ffc107;
+            color: #212529;
+            align-self: center;
+            text-align: center;
+            font-style: italic;
         }
         .chat-input {
             display: flex;
@@ -78,6 +87,7 @@
             font-size: 1em;
             margin-right: 10px;
         }
+
         .chat-input button {
             padding: 10px 20px;
             background-color: #007bff;
@@ -90,6 +100,7 @@
         .chat-input button:hover {
             background-color: #0056b3;
         }
+  
     </style>
 </head>
 <body>
@@ -107,5 +118,40 @@
     </div>
 
     <script src="script.js"></script>
+    <script>
+        
+        function sendMessage() {
+            const userInput = document.getElementById('user-input');
+            const message = userInput.value.trim();
+            if (message === '') return;
+
+            addMessage('user', message);
+            userInput.value = '';
+
+            // Simulate bot response
+           
+                addMessage('bot', getBotResponse(message));
+           
+        }
+
+        function addMessage(sender, message) {
+            const chatMessages = document.getElementById('chat-messages');
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-message', sender);
+            messageElement.textContent = message;
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function getBotResponse(message) {
+            // Simple bot response logic
+            const responses = {
+                'hello': 'Hi there!',
+                'how are you': 'I am a bot, I am always good.',
+                'bye': 'Goodbye!'
+            };
+            return responses[message.toLowerCase()] || "I don't understand that.";
+        }
+    </script>
 </body>
 </html>
